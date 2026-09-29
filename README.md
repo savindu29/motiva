@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Motiva Physio
 
-## Getting Started
-
-First, run the development server:
+A concept website for a physiotherapy clinic in Colombo, and an agency-style
+case study of it. Next.js App Router, React 19, three.js. Demo only: bookings
+aren't sent anywhere, and the reviews and headline figures are samples.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Routes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route      | What it is                                               |
+|------------|----------------------------------------------------------|
+| `/`        | Redirects to `/concept`                                  |
+| `/concept` | The case study (`app/concept/`)                          |
+| `/site`    | The clinic website (`app/site/`)                         |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The site (`app/site/`)
 
-## Learn More
+- `page.tsx` puts the sections together. `data.ts` holds all the content:
+  services, physios, body areas, packages, reviews and FAQs.
+- `SiteProvider.tsx` shares the booking state, so any card can open the
+  booking at the right step. `Booking.tsx` is the four-step booking.
+- `PainMap.tsx` + `HumanBody.tsx`: the 3D body you turn and tap
+  (`public/site/human.glb`).
+- `xray.ts` + `Photo.tsx`: the X-ray renders in the pain map's area card
+  (`public/site/body.glb`).
+- `site.css` is scoped under `.mp`, so it can't leak into the case study.
 
-To learn more about Next.js, take a look at the following resources:
+Images are in `public/site/`: `hero.jpg`, `booking.jpg`, `team/`,
+`packages/` and `blog/`. To swap one, replace the file, or change its path in
+`data.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## The case study (`app/concept/`)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Its screenshots are in `public/motiva/`. Retake all of them from the running
+site with:
 
-## Deploy on Vercel
+```bash
+node tools/capture/capture.mjs http://localhost:3000
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tools
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `tools/capture/`: screenshots of `/site` for the case study (headless Edge).
+- `tools/human-glb/`: rebuilds `public/site/human.glb` from the 3ds Max
+  export. The source files (600 MB) and the original photos are kept outside
+  the project in `../motiva-source-assets/`.
